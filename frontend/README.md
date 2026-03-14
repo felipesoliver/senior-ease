@@ -1,78 +1,43 @@
-# Next.js Project | Senior Ease
+# Senior Ease
 
-## Project stack:
+Aplicação em Next.js com App Router, TypeScript, shadcn/ui e Tailwind CSS.
 
-- React + [NextJS](https://nextjs.org)
-- Lint (Eslint and Prettier)
-- Precommit Lints
+## Desenvolvimento
 
-## IDE Setup
+Requer Node 20.9+.
 
-To maintain code quality and always have a standard across all of the team's
-project has rules defined for javascript and css / scss. We use the Eslint /
-Prettier for Javascript and Stylelint for SCSS. It is necessary to
-integration of these rules with your favorite IDE. We recommend using Visual
-Studio Code with the following plugins:
+Se usar nvm:
 
-| Plugin   | README                                                                                     |
-| -------- | ------------------------------------------------------------------------------------------ |
-| ESlint   | [check plugin](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) |
-| Prettier | [check plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) |
-
-## Pre-commit
-
-Before running git commit, the rules of ESLint and Stylelint are executed. If
-there is an error or some non-default code of the site will generate an error
-and you will not be able to commit.
-
-## Frontend
-
-This is a project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-#### Update All Packages to the Latest Version
-
-You just need to run `npx npm-check-updates -u` to upgrade all version hints in package.json, allowing installation of the new major versions.
-
-### Getting Started
-
-Before you begin, make sure your system meets the following requirements:
-
-- [`Node.js 20.19`](https://nodejs.org/pt) or later.
-- macOS, Windows (including WSL), or Linux.
-
-Install all the dependencies
-
-```bash
-npm install
+```sh
+nvm use
 ```
 
-then, run the development server at "/app" directory:
+1. Instale as dependências.
+2. Rode o servidor local.
 
-```bash
+```sh
+bun install
+bun run dev
+```
+
+Se preferir npm:
+
+```sh
+npm install
 npm run dev
 ```
 
-open [http://localhost:3000](http://localhost:3000) with your browser to see the
-result.
+## Scripts
 
-## Project Structure Overview
+- `dev`: inicia o ambiente Next.js em desenvolvimento.
+- `build`: gera o build de produção.
+- `start`: sobe o build de produção.
+- `lint`: executa o ESLint.
+- `test`: roda os testes com Vitest.
 
-This section outlines the folder structure of the project located at the `app/` directory. Each folder within it serves a specific purpose, supporting a modular, scalable, and maintainable codebase.
+## Estrutura
 
-````
-app/
-├── assets/
-│   ├── icons/
-│   └── images/
-├── components/
-│   └── */
-├── contexts/
-├── data/
-├── hooks/
-├── layouts/
-│   ├── blocks/
-│   └── structure/
-├── styles/
-├── types/
-└── utils/
-````
+- `app/`: rotas e layout do App Router.
+- `src/components/`: componentes reutilizáveis e UI.
+- `src/contexts/`: providers e estado compartilhado.
+- `src/pages/`: conteúdo de tela reutilizado pelas rotas do App Router.
