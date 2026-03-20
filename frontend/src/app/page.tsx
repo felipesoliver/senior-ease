@@ -1,5 +1,5 @@
-import Index from "@/pages/Index";
+import LoginForm from "@/components/LoginForm";
 
 export default function HomePage() {
-  return <Index />;
+  return <LoginForm />;
 }

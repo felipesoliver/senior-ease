@@ -36,30 +36,31 @@ const STORAGE_KEY = "senior-ease-preferences";
 
 export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        setPreferences((current) => ({ ...current, ...JSON.parse(stored) }));
+        setPreferences((prev) => ({ ...prev, ...JSON.parse(stored) }));
       }
     } catch {
       setPreferences(DEFAULT_PREFERENCES);
     }
+    setIsHydrated(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
-
-    // Apply font size to document
     const root = document.documentElement;
     root.classList.remove("font-size-normal", "font-size-large", "font-size-extra-large");
     root.classList.add(`font-size-${preferences.fontSize}`);
-
-    // Apply contrast
     root.classList.remove("contrast-normal", "contrast-high");
     root.classList.add(`contrast-${preferences.contrast}`);
-  }, [preferences]);
+
+    if (isHydrated) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
+    }
+  }, [isHydrated, preferences]);
 
   const updatePreference = <K extends keyof UserPreferences>(key: K, value: UserPreferences[K]) => {
     setPreferences((prev) => ({ ...prev, [key]: value }));

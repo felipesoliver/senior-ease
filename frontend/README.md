@@ -1,43 +1,73 @@
 # Senior Ease
 
-Aplicação em Next.js com App Router, TypeScript, shadcn/ui e Tailwind CSS.
+## Project info
 
-## Desenvolvimento
+Aplicacao migrada para Next.js com App Router.
 
-Requer Node 20.9+.
+## How can I edit this code?
 
-Se usar nvm:
+There are several ways of editing your application.
+
+**Use Lovable**
+
+Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+
+Changes made via Lovable will be committed automatically to this repo.
+
+**Use your preferred IDE**
+
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+
+Follow these steps:
 
 ```sh
-nvm use
-```
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
 
-1. Instale as dependências.
-2. Rode o servidor local.
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
 
-```sh
-bun install
-bun run dev
-```
+# Step 3: Install the necessary dependencies.
+npm i
 
-Se preferir npm:
-
-```sh
-npm install
+# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
-## Scripts
+**Edit a file directly in GitHub**
 
-- `dev`: inicia o ambiente Next.js em desenvolvimento.
-- `build`: gera o build de produção.
-- `start`: sobe o build de produção.
-- `lint`: executa o ESLint.
-- `test`: roda os testes com Vitest.
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-## Estrutura
+**Use GitHub Codespaces**
 
-- `app/`: rotas e layout do App Router.
-- `src/components/`: componentes reutilizáveis e UI.
-- `src/contexts/`: providers e estado compartilhado.
-- `src/pages/`: conteúdo de tela reutilizado pelas rotas do App Router.
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
+
+## What technologies are used for this project?
+
+This project is built with:
+
+- Next.js App Router
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
+## How can I deploy this project?
+
+Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+
+## Can I connect a custom domain to my Lovable project?
+
+Yes, you can!
+
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
