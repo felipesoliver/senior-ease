@@ -27,34 +27,7 @@ import {
   GripVertical,
 } from "lucide-react";
 import { toast } from "sonner";
-
-interface Task {
-  id: string;
-  label: string;
-  done: boolean;
-}
-
-const STORAGE_KEY = "senior-ease-tasks";
-
-const defaultTasks: Task[] = [
-  { id: "1", label: "Tomar remédio da manhã", done: false },
-  { id: "2", label: "Caminhar por 20 minutos", done: false },
-  { id: "3", label: "Beber 2 copos de água", done: true },
-  { id: "4", label: "Ligar para a família", done: false },
-];
-
-function loadTasks(): Task[] {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : defaultTasks;
-  } catch {
-    return defaultTasks;
-  }
-}
-
-function saveTasks(tasks: Task[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-}
+import { defaultTasks, loadTasks, saveTasks, type Task } from "@/lib/tasks";
 
 export default function TaskManagerView() {
   const router = useRouter();

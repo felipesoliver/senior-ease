@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,12 +22,7 @@ import {
   User,
 } from "lucide-react";
 import { toast } from "sonner";
-
-interface Task {
-  id: string;
-  label: string;
-  done: boolean;
-}
+import { defaultTasks, loadTasks, saveTasks, type Task } from "@/lib/tasks";
 
 interface GuidedStep {
   id: number;
@@ -41,13 +36,6 @@ interface ActivityEntry {
   label: string;
   date: string;
 }
-
-const initialTasks: Task[] = [
-  { id: "1", label: "Tomar remédio da manhã", done: false },
-  { id: "2", label: "Caminhar por 20 minutos", done: false },
-  { id: "3", label: "Beber 2 copos de água", done: true },
-  { id: "4", label: "Ligar para a família", done: false },
-];
 
 const initialSteps: GuidedStep[] = [
   { id: 1, title: "Passo 1", description: "Pegue o remédio na caixa azul", completed: true },
@@ -70,12 +58,48 @@ const initialHistory: ActivityEntry[] = [
 
 export default function DashboardView() {
   const router = useRouter();
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>(defaultTasks);
+  const [hasLoadedTasks, setHasLoadedTasks] = useState(false);
   const [steps, setSteps] = useState<GuidedStep[]>(initialSteps);
   const [history, setHistory] = useState<ActivityEntry[]>(initialHistory);
 
+  useEffect(() => {
+    setTasks(loadTasks());
+    setHasLoadedTasks(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedTasks) {
+      return;
+    }
+
+    saveTasks(tasks);
+  }, [hasLoadedTasks, tasks]);
+
+  useEffect(() => {
+    const syncTasks = () => {
+      setTasks(loadTasks());
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        syncTasks();
+      }
+    };
+
+    window.addEventListener("focus", syncTasks);
+    window.addEventListener("storage", syncTasks);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("focus", syncTasks);
+      window.removeEventListener("storage", syncTasks);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   const completedTasks = tasks.filter((task) => task.done).length;
-  const progressPercent = Math.round((completedTasks / tasks.length) * 100);
+  const progressPercent = tasks.length === 0 ? 0 : Math.round((completedTasks / tasks.length) * 100);
 
   const toggleTask = (id: string) => {
     setTasks((previousTasks) => {
@@ -179,33 +203,40 @@ export default function DashboardView() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {tasks.map((task) => (
-                <button
-                  key={task.id}
-                  onClick={() => toggleTask(task.id)}
-                  className={`flex w-full items-center gap-4 rounded-xl border-2 p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/40 ${
-                    task.done
-                      ? "border-success/40 bg-success/10"
-                      : "border-border bg-card hover:border-primary/40 hover:bg-primary-light"
-                  }`}
-                  aria-label={`${task.done ? "Concluída" : "Marcar como concluída"}: ${task.label}`}
-                >
-                  <Checkbox
-                    checked={task.done}
-                    tabIndex={-1}
-                    aria-hidden
-                    className="h-6 w-6 rounded-md border-2"
-                  />
-                  <span
-                    className={`flex-1 text-lg font-medium ${
-                      task.done ? "text-muted-foreground line-through" : "text-foreground"
+              {tasks.length === 0 ? (
+                <div className="rounded-xl border-2 border-dashed border-border p-6 text-center">
+                  <p className="text-lg font-semibold text-foreground">Nenhuma tarefa cadastrada</p>
+                  <p className="text-base text-muted-foreground">Adicione tarefas no gerenciador para acompanhar aqui.</p>
+                </div>
+              ) : (
+                tasks.map((task) => (
+                  <button
+                    key={task.id}
+                    onClick={() => toggleTask(task.id)}
+                    className={`flex w-full items-center gap-4 rounded-xl border-2 p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/40 ${
+                      task.done
+                        ? "border-success/40 bg-success/10"
+                        : "border-border bg-card hover:border-primary/40 hover:bg-primary-light"
                     }`}
+                    aria-label={`${task.done ? "Concluída" : "Marcar como concluída"}: ${task.label}`}
                   >
-                    {task.label}
-                  </span>
-                  {task.done && <CheckCircle2 className="h-6 w-6 text-success" aria-hidden />}
-                </button>
-              ))}
+                    <Checkbox
+                      checked={task.done}
+                      tabIndex={-1}
+                      aria-hidden
+                      className="h-6 w-6 rounded-md border-2"
+                    />
+                    <span
+                      className={`flex-1 text-lg font-medium ${
+                        task.done ? "text-muted-foreground line-through" : "text-foreground"
+                      }`}
+                    >
+                      {task.label}
+                    </span>
+                    {task.done && <CheckCircle2 className="h-6 w-6 text-success" aria-hidden />}
+                  </button>
+                ))
+              )}
               <Button
                 size="lg"
                 className="w-full text-lg"
