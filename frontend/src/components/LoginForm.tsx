@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, LogIn, Heart } from "lucide-react";
 import { toast } from "sonner";
+import { setLoggedIn, isLoggedIn } from "@/lib/auth";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +15,12 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      router.replace("/dashboard");
+    }
+  }, [router]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +31,7 @@ const LoginForm = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      setLoggedIn();
       toast.success("Bem-vindo de volta!");
       router.push("/dashboard");
     }, 1500);

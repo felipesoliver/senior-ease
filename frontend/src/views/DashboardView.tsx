@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { isLoggedIn, setLoggedOut } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -67,6 +68,12 @@ export default function DashboardView() {
     setTasks(loadTasks());
     setHasLoadedTasks(true);
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.replace("/");
+    }
+  }, [router]);
 
   useEffect(() => {
     if (!hasLoadedTasks) {
@@ -170,7 +177,10 @@ export default function DashboardView() {
               variant="outline"
               size="sm"
               className="gap-2 text-base"
-              onClick={() => router.push("/")}
+              onClick={() => {
+                setLoggedOut();
+                router.push("/");
+              }}
               aria-label="Sair"
             >
               <LogOut className="h-5 w-5" aria-hidden />

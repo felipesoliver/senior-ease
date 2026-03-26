@@ -2,8 +2,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 
 const mockPush = vi.fn();
+const mockReplace = vi.fn();
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: mockPush }),
+  useRouter: () => ({ push: mockPush, replace: mockReplace }),
 }));
 
 const mockError = vi.fn();
@@ -19,8 +20,10 @@ describe("LoginForm integration", () => {
 
     vi.useFakeTimers();
     mockPush.mockClear();
+    mockReplace.mockClear();
     mockError.mockClear();
     mockSuccess.mockClear();
+    localStorage.clear();
   });
 
   afterEach(() => {
@@ -52,6 +55,15 @@ describe("LoginForm integration", () => {
     vi.advanceTimersByTime(1500);
 
     expect(mockSuccess).toHaveBeenCalledWith("Bem-vindo de volta!");
+    expect(localStorage.getItem("senior-ease-logged-in")).toEqual("true");
     expect(mockPush).toHaveBeenCalledWith("/dashboard");
+  });
+
+  it("redirects back to dashboard when already logged in", async () => {
+    localStorage.setItem("senior-ease-logged-in", "true");
+    const { default: LoginForm } = await import("@/components/LoginForm");
+    render(<LoginForm />);
+
+    expect(mockReplace).toHaveBeenCalledWith("/dashboard");
   });
 });

@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { isLoggedIn, setLoggedOut } from "@/lib/auth";
 import {
   Heart,
   User,
@@ -43,6 +45,12 @@ export default function ProfileView() {
   const router = useRouter();
   const { preferences, updatePreference, resetPreferences } = usePreferences();
 
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.replace("/");
+    }
+  }, [router]);
+
   const handleReset = () => {
     resetPreferences();
     toast.success("Preferências restauradas ao padrão! ✅");
@@ -76,7 +84,10 @@ export default function ProfileView() {
               variant="outline"
               size="sm"
               className="gap-2 text-base"
-              onClick={() => router.push("/")}
+              onClick={() => {
+                setLoggedOut();
+                router.push("/");
+              }}
               aria-label="Sair"
             >
               <LogOut className="h-5 w-5" aria-hidden />
