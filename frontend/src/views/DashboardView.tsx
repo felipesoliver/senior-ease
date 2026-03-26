@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { isLoggedIn, setLoggedOut } from "@/lib/auth";
+import { isLoggedIn, setLoggedOut, getCurrentUser } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -65,7 +65,8 @@ export default function DashboardView() {
   const [history, setHistory] = useState<ActivityEntry[]>(initialHistory);
 
   useEffect(() => {
-    setTasks(loadTasks());
+    const user = getCurrentUser();
+    setTasks(loadTasks(user));
     setHasLoadedTasks(true);
   }, []);
 
@@ -80,12 +81,12 @@ export default function DashboardView() {
       return;
     }
 
-    saveTasks(tasks);
+    saveTasks(tasks, getCurrentUser());
   }, [hasLoadedTasks, tasks]);
 
   useEffect(() => {
     const syncTasks = () => {
-      setTasks(loadTasks());
+      setTasks(loadTasks(getCurrentUser()));
     };
 
     const handleVisibilityChange = () => {

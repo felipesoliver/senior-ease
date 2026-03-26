@@ -6,6 +6,10 @@ export interface Task {
 
 export const TASKS_STORAGE_KEY = "senior-ease-tasks";
 
+function getTaskKey(user: string | null): string {
+  return user ? `${TASKS_STORAGE_KEY}-${user}` : TASKS_STORAGE_KEY;
+}
+
 export const defaultTasks: Task[] = [
   { id: "1", label: "Tomar remédio da manhã", done: false },
   { id: "2", label: "Caminhar por 20 minutos", done: false },
@@ -13,23 +17,25 @@ export const defaultTasks: Task[] = [
   { id: "4", label: "Ligar para a família", done: false },
 ];
 
-export function loadTasks(): Task[] {
+export function loadTasks(user: string | null): Task[] {
   if (typeof window === "undefined") {
     return defaultTasks;
   }
 
   try {
-    const stored = window.localStorage.getItem(TASKS_STORAGE_KEY);
+    const storageKey = getTaskKey(user);
+    const stored = window.localStorage.getItem(storageKey);
     return stored ? JSON.parse(stored) : defaultTasks;
   } catch {
     return defaultTasks;
   }
 }
 
-export function saveTasks(tasks: Task[]) {
+export function saveTasks(tasks: Task[], user: string | null) {
   if (typeof window === "undefined") {
     return;
   }
 
-  window.localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks));
+  const storageKey = getTaskKey(user);
+  window.localStorage.setItem(storageKey, JSON.stringify(tasks));
 }

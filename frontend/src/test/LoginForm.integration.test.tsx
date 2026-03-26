@@ -56,6 +56,7 @@ describe("LoginForm integration", () => {
 
     expect(mockSuccess).toHaveBeenCalledWith("Bem-vindo de volta!");
     expect(localStorage.getItem("senior-ease-logged-in")).toEqual("true");
+    expect(localStorage.getItem("senior-ease-current-user")).toEqual("a@b.com");
     expect(mockPush).toHaveBeenCalledWith("/dashboard");
   });
 

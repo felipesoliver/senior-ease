@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { isLoggedIn } from "@/lib/auth";
+import { getCurrentUser, isLoggedIn } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -47,7 +47,7 @@ export default function TaskManagerView() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {
-    setTasks(loadTasks());
+    setTasks(loadTasks(getCurrentUser()));
     setHasLoadedTasks(true);
   }, []);
 
@@ -56,7 +56,7 @@ export default function TaskManagerView() {
       return;
     }
 
-    saveTasks(tasks);
+    saveTasks(tasks, getCurrentUser());
   }, [hasLoadedTasks, tasks]);
 
   const updateTasks = (updatedTasks: Task[]) => {

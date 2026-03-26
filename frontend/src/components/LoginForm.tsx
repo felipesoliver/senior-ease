@@ -31,7 +31,7 @@ const LoginForm = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setLoggedIn();
+      setLoggedIn(email.trim().toLowerCase());
       toast.success("Bem-vindo de volta!");
       router.push("/dashboard");
     }, 1500);
